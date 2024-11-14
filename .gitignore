@@ -1,0 +1,16 @@
+# Ignore environment-specific configuration
+
+__pycache__/
+*.pyc
+instance/
+# Ignore any IDE or editor-specific files
+.vscode/
+.idea/
+# Ignore virtual environments
+venv/
+# Ignore SQLite database files
+*.db
+# Ignore Pytest cache
+.pytest_cache/
+# Ignore other cache or log files
+*.log
