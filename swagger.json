@@ -1,0 +1,214 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "User Management API",
+      "description": "API for managing users with JWT authentication",
+      "version": "1.0.0"
+    },
+    "host": "127.0.0.1:5000",
+    "basePath": "/",
+    "schemes": ["http"],
+    "securityDefinitions": {
+      "BearerAuth": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
+      }
+    },
+    "security": [
+      {
+        "BearerAuth": []
+      }
+    ],
+    "paths": {
+      "/login": {
+        "post": {
+          "summary": "Login to generate JWT token",
+          "description": "Logs in a user and returns a JWT token",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "user@example.com"
+                  }
+                },
+                "required": ["email"]
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "JWT token returned",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      },
+      "/users": {
+        "post": {
+          "summary": "Create a new user",
+          "description": "Creates a new user in the database",
+          "security": [{"BearerAuth": []}],
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "johndoe@example.com"
+                  }
+                },
+                "required": ["name", "email"]
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "User created successfully"
+            }
+          }
+        },
+        "get": {
+          "summary": "Get all users",
+          "description": "Retrieves a list of all users",
+          "security": [{"BearerAuth": []}],
+          "responses": {
+            "200": {
+              "description": "A list of users",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "integer"},
+                    "name": {"type": "string"},
+                    "email": {"type": "string"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/users/{id}": {
+        "get": {
+          "summary": "Get a user by ID",
+          "description": "Retrieves a user by their ID",
+          "security": [{"BearerAuth": []}],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "integer",
+              "description": "User ID"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User details",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {"type": "integer"},
+                  "name": {"type": "string"},
+                  "email": {"type": "string"}
+                }
+              }
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update a user by ID",
+          "description": "Updates a user's information",
+          "security": [{"BearerAuth": []}],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "integer",
+              "description": "User ID"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Updated Name"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "updated@example.com"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User updated successfully"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete a user by ID",
+          "description": "Deletes a user by their ID",
+          "security": [{"BearerAuth": []}],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "integer",
+              "description": "User ID"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User deleted successfully"
+            },
+            "404": {
+              "description": "User not found"
+            }
+          }
+        }
+      }
+    }
+  }
+  
