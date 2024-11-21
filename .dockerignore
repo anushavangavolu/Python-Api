@@ -1,0 +1,10 @@
+# Prevent sensitive files from being included
+.env
+*.pyc
+__pycache__/
+instance/
+# Exclude virtual environment
+venv/
+# Ignore IDE files
+.vscode/
+.idea/
