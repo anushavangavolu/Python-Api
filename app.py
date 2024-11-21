@@ -4,7 +4,6 @@ import jwt
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flasgger import Swagger
-import pyodbc
 import os
 from dotenv import load_dotenv
 
@@ -14,6 +13,7 @@ SECRET_KEY = 'your_secret_key_here'
 
 # Load environment variables from .env file
 load_dotenv()
+
 
 app = Flask(__name__)
 
