@@ -4,12 +4,10 @@ on:
   push:
     branches:
       - main                  # Trigger on pushes to main (for pushing to DockerHub)
-      - feature/**            # Trigger on branches starting with "feature/"
-      - fix/**                # Trigger on branches starting with "fix/"
   pull_request:
     branches:
-      - main                  # Trigger when pull requests are made to main
-
+      - feature/**            # Trigger on branches starting with "feature/"
+      - fix/**                # Trigger on branches starting with "fix/"
 jobs:
   build-docker:
     name: Build Docker Image
