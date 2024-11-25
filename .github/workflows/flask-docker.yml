@@ -20,10 +20,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Step 2: Get the short commit hash
+      - name: Get commit hash
+        id: commit
+        run: echo "commit_hash=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
       # Step 2: Build Docker image
       - name: Build Docker image
         run: |
-          docker build -t anushavangavolu/flask-api .
+          docker build -t anushavangavolu/flask-api:${{ env.commit_hash }} .
+          docker tag anushavangavolu/flask-api:${{ env.commit_hash }} anushavangavolu/flask-api:latest
 
   push-docker:
     name: Push Docker Image to DockerHub
@@ -32,10 +38,6 @@ jobs:
     if: github.ref == 'refs/heads/main'  # Only push when on the main branch
 
     steps:
-      # Step 1: Checkout code
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       # Step 2: Log in to DockerHub
       - name: Log in to DockerHub
         uses: docker/login-action@v2
@@ -46,6 +48,5 @@ jobs:
       # Step 3: Push Docker image
       - name: Push Docker image
         run: |
-          docker tag anushavangavolu/flask-api anushavangavolu/flask-api:latest
-          docker push anushavangavolu/flask-api
+          docker push anushavangavolu/flask-api:${{ env.commit_hash }}
           docker push anushavangavolu/flask-api:latest
