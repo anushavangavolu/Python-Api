@@ -1,13 +1,12 @@
 name: Flask Docker CI/CD
 
 on:
-  push:
-    branches:
-      - main                  # Trigger on pushes to main (for pushing to DockerHub)
   pull_request:
     branches:
-      - feature/**            # Trigger on branches starting with "feature/"
-      - fix/**                # Trigger on branches starting with "fix/"
+      - master             # PR targets the master branch
+    paths-ignore:
+      - "**/README.md"    # Optional: Ignore changes to specific files (e.g., README)
+
 jobs:
   build-docker:
     name: Build Docker Image
@@ -18,10 +17,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Step 2: Check the source branch name
+      - name: Validate source branch
+        run: |
+          if [[ ! "${{ github.head_ref }}" =~ ^(feature/|fix/) ]]; then
+            echo "PR source branch does not match 'feature/' or 'fix/' pattern. Exiting."
+            exit 1
+          fi
+        shell: bash
+
       # Step 2: Build Docker image
       - name: Build Docker image
         run: |
-          docker build -t your-dockerhub-username/flask-api .
+          docker build -t anushavangavolu/flask-api:pr-${{ github.event.pull_request.number }} .
 
   push-docker:
     name: Push Docker Image to DockerHub
@@ -44,6 +52,5 @@ jobs:
       # Step 3: Push Docker image
       - name: Push Docker image
         run: |
-          docker tag your-dockerhub-username/flask-api:${{ github.ref_name }} your-dockerhub-username/flask-api:latest
-          docker push your-dockerhub-username/flask-api:${{ github.ref_name }}
-          docker push your-dockerhub-username/flask-api:latest
+          docker tag anushavangavolu/flask-api:pr-${{ github.event.pull_request.number }} anushavangavolu/flask-api:pr-${{ github.head_ref }}
+          docker push anushavangavolu/flask-api:pr-${{ github.head_ref }}
