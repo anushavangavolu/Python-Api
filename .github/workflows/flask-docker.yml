@@ -23,7 +23,7 @@ jobs:
       # Step 2: Build Docker image
       - name: Build Docker image
         run: |
-          docker build -t your-dockerhub-username/flask-api:${{ github.ref_name }} .
+          docker build -t your-dockerhub-username/flask-api .
 
   push-docker:
     name: Push Docker Image to DockerHub
